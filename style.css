@@ -1,265 +1,488 @@
 
+/* =====================================
+   DOWNLOADGAMES – MAIN DESIGN
+===================================== */
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --background: #10111a;
+    --surface: #191b29;
+    --surface-light: #222436;
+    --border: #303249;
+    --primary: #7563ed;
+    --primary-hover: #9385ff;
+    --text: #f4f4f8;
+    --muted: #aaaabd;
+    --gold: #ffdc71;
 }
 
 body {
-  background: #11121a;
-  color: #f4f4f8;
-  font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
 }
 
-button, input, select {
-  font: inherit;
+button,
+input,
+select,
+textarea {
+    font: inherit;
 }
 
 button {
-  background: #6554db;
-  color: white;
-  border: none;
-  padding: 11px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
 }
 
 button:hover {
-  background: #8878ff;
-  transform: translateY(-1px);
+    background: var(--primary-hover);
+    transform: translateY(-2px);
 }
 
-input, select {
-  background: #20212d;
-  color: white;
-  border: 1px solid #39394d;
-  padding: 12px;
-  border-radius: 8px;
-  width: 100%;
-  margin: 7px 0;
+button:active {
+    transform: scale(0.98);
 }
+
+input,
+select,
+textarea {
+    background: var(--surface-light);
+    color: white;
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    margin: 7px 0;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px #7563ed33;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* =====================================
+   HEADER
+===================================== */
 
 .header {
-  min-height: 75px;
-  padding: 15px 4%;
-  background: #191a26;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #29283d;
+    min-height: 75px;
+    padding: 15px 4%;
+    background: #191a26;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(12px);
 }
 
 .logo {
-  color: white;
-  text-decoration: none;
-  font-size: 25px;
-  font-weight: bold;
+    color: white;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
 }
 
 .logo span {
-  color: #8878ff;
+    color: var(--primary-hover);
 }
 
 .header > input {
-  max-width: 300px;
+    max-width: 300px;
 }
 
 .header-actions,
 .button-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .points {
-  color: #ffdc71;
-  white-space: nowrap;
+    color: var(--gold);
+    white-space: nowrap;
+    font-weight: bold;
 }
 
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
 main {
-  max-width: 1250px;
-  margin: auto;
-  padding: 25px;
+    max-width: 1350px;
+    margin: auto;
+    padding: 30px 25px;
 }
 
 .hero {
-  padding: 65px 25px;
-  text-align: center;
-  background: linear-gradient(135deg, #292044, #171a30);
-  border: 1px solid #393052;
-  border-radius: 18px;
-  margin-bottom: 35px;
+    padding: 75px 25px;
+    text-align: center;
+    background:
+        radial-gradient(circle at top right, #6652bd44, transparent 40%),
+        linear-gradient(135deg, #292044, #171a30);
+    border: 1px solid #393052;
+    border-radius: 18px;
+    margin-bottom: 40px;
+    box-shadow: 0 15px 45px #0003;
 }
 
 .hero h1 {
-  font-size: clamp(30px, 5vw, 48px);
-  margin-bottom: 15px;
+    font-size: clamp(30px, 5vw, 48px);
+    margin-bottom: 15px;
+    letter-spacing: -1px;
 }
 
 .hero p {
-  color: #c1bfd4;
+    color: #c1bfd4;
+    max-width: 650px;
+    margin: auto;
 }
 
 .section-title {
-  margin: 25px 0;
+    margin: 30px 0 22px;
+    font-size: 26px;
 }
 
+/* =====================================
+   GAME GRID
+===================================== */
+
 .game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+    align-items: stretch;
 }
 
 .game-card,
 .panel {
-  background: #1b1c29;
-  border: 1px solid #303044;
-  border-radius: 13px;
-  padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
 }
 
 .game-card {
-  transition: 0.2s;
+    padding: 12px;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
 
 .game-card:hover {
-  transform: translateY(-5px);
-  border-color: #8878ff;
+    transform: translateY(-6px);
+    border-color: var(--primary-hover);
+    box-shadow: 0 12px 30px #0005;
 }
+
+/* =====================================
+   GAME COVER IMAGES
+===================================== */
 
 .game-cover {
-  height: 145px;
-  background: linear-gradient(135deg, #30264e, #151b2e);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 42px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+    width: 100%;
+    height: 210px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #30264e, #151b2e);
+    font-size: 42px;
+    border-radius: 9px;
+    margin-bottom: 15px;
 }
 
+.game-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.game-card:hover .game-cover img {
+    transform: scale(1.06);
+}
+
+/* =====================================
+   GAME CARD CONTENT
+===================================== */
+
 .game-card h3 {
-  margin-bottom: 8px;
+    margin: 5px 0 8px;
+    font-size: 19px;
 }
 
 .game-card p {
-  color: #b5b4c5;
-  margin-bottom: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-size: 14px;
 }
 
 .game-card button {
-  width: 100%;
-  margin-top: 7px;
+    width: 100%;
+    margin-top: 7px;
 }
 
+/* =====================================
+   PANELS
+===================================== */
+
+.panel {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.panel h2,
+.panel h3 {
+    margin-bottom: 12px;
+}
+
+/* =====================================
+   MODALS
+===================================== */
+
 .modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: #000b;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    background: #000c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
-  background: #191a27;
-  border: 1px solid #45405f;
-  border-radius: 14px;
-  padding: 25px;
-  width: 100%;
-  max-width: 550px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
+    background: #191a27;
+    border: 1px solid #45405f;
+    border-radius: 16px;
+    padding: 25px;
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 70px #0008;
+    animation: modalOpen 0.2s ease;
+}
+
+@keyframes modalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .admin-content {
-  max-width: 750px;
+    max-width: 750px;
 }
 
 .modal-content h2,
 .modal-content h3 {
-  margin: 12px 0;
+    margin: 12px 0;
 }
 
 .modal-content p {
-  margin: 10px 0;
-  color: #d0cede;
+    margin: 10px 0;
+    color: #d0cede;
 }
 
 .modal-content hr {
-  border: 0;
-  border-top: 1px solid #39394d;
-  margin: 20px 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
 }
 
 .close {
-  float: right;
-  padding: 7px 11px;
-  background: #343447;
+    float: right;
+    padding: 7px 11px;
+    background: #343447;
 }
 
-.hidden {
-  display: none !important;
+.close:hover {
+    background: #55556e;
 }
+
+/* =====================================
+   HIDDEN ELEMENTS
+===================================== */
+
+.hidden {
+    display: none !important;
+}
+
+/* =====================================
+   CART AND ADMIN LISTS
+===================================== */
 
 #adminKeyList > div,
 #adminGameList > div,
 #cartItems > div {
-  background: #222331;
-  border: 1px solid #39394d;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 8px 0;
-  overflow-wrap: anywhere;
+    background: var(--surface-light);
+    border: 1px solid #39394d;
+    padding: 13px;
+    border-radius: 9px;
+    margin: 9px 0;
+    overflow-wrap: anywhere;
+    transition: border-color 0.2s;
+}
+
+#adminKeyList > div:hover,
+#adminGameList > div:hover,
+#cartItems > div:hover {
+    border-color: var(--primary);
 }
 
 #adminKeyList button {
-  margin-top: 8px;
+    margin-top: 8px;
 }
 
 .key-text {
-  color: #a99cff;
-  font-family: monospace;
-  overflow-wrap: anywhere;
+    color: #a99cff;
+    font-family: monospace;
+    overflow-wrap: anywhere;
 }
+
+/* =====================================
+   COMMENTS
+===================================== */
+
+#comments {
+    margin: 15px 0;
+}
+
+#comments p {
+    background: var(--surface-light);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================
+   FOOTER
+===================================== */
 
 footer {
-  text-align: center;
-  padding: 30px;
-  color: #89889c;
-  border-top: 1px solid #29283d;
-  margin-top: 50px;
+    text-align: center;
+    padding: 30px;
+    color: #89889c;
+    border-top: 1px solid var(--border);
+    margin-top: 50px;
+    background: #151620;
 }
 
+/* =====================================
+   SCROLLBAR
+===================================== */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #44445c;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
 @media (max-width: 700px) {
-  .header {
-    align-items: stretch;
-  }
+    .header {
+        align-items: stretch;
+        position: relative;
+    }
 
-  .header > input {
-    max-width: none;
-  }
+    .header > input {
+        max-width: none;
+    }
 
-  .header-actions {
-    justify-content: center;
-  }
+    .header-actions {
+        justify-content: center;
+    }
 
-  .header-actions button {
-    flex: 1;
-  }
+    .header-actions button {
+        flex: 1;
+    }
 
-  main {
-    padding: 15px;
-  }
+    main {
+        padding: 15px;
+    }
 
-  .modal-content {
-    padding: 18px;
-  }
+    .hero {
+        padding: 45px 18px;
+    }
+
+    .game-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+    }
+
+    .game-cover {
+        height: 160px;
+    }
+
+    .game-card {
+        padding: 9px;
+    }
+
+    .game-card h3 {
+        font-size: 16px;
+    }
+
+    .modal-content {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 380px) {
+    .game-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .game-cover {
+        height: 200px;
+    }
 }

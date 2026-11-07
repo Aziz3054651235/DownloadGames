@@ -163,9 +163,21 @@ function renderGames(filter = "") {
         const card = document.createElement("article");
         card.className = "game-card";
 
+        // Spielbild
         const cover = document.createElement("div");
         cover.className = "game-cover";
-        cover.textContent = game.icon || "🎮";
+
+        if (game.image) {
+            const img = document.createElement("img");
+            img.src = game.image;
+            img.alt = game.name;
+            img.onerror = () => {
+                cover.textContent = game.icon || "🎮";
+            };
+            cover.appendChild(img);
+        } else {
+            cover.textContent = game.icon || "🎮";
+        }
 
         const title = document.createElement("h3");
         title.textContent = game.name;
@@ -186,15 +198,6 @@ function renderGames(filter = "") {
         grid.appendChild(card);
     });
 }
-
-const searchInput = element("searchInput");
-
-if (searchInput) {
-    searchInput.addEventListener("input", event => {
-        renderGames(event.target.value);
-    });
-}
-
 /* =====================================
    SPIELDETAILS
 ===================================== */
