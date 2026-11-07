@@ -878,7 +878,19 @@ function renderAdminGames() {
         container.appendChild(item);
     });
 }
+/* =====================================
+   SUCHFUNKTION
+===================================== */
 
+const searchInput = element("searchInput");
+
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        renderGames(searchInput.value);
+    });
+} else {
+    console.error("Suchfeld mit ID 'searchInput' nicht gefunden!");
+}
 /* =====================================
    WEBSITE STARTEN
 ===================================== */
