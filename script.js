@@ -131,10 +131,12 @@ function updatePoints() {
 // DEMO: 500 Punkte pro Sekunde
 // Für eine echte Website muss das serverseitig laufen.
 setInterval(() => {
-    points += 1;
+    if (!currentUser) return;
+
+    points += 500;
     updatePoints();
     saveAll();
-}, 2000);
+}, 1000);
 
 /* =====================================
    SPIELE ANZEIGEN
@@ -225,10 +227,27 @@ function openGame(id) {
         description.textContent = selectedGame.description;
     }
 
-    if (info) {
-        info.textContent =
-            `${selectedGame.genre} · ${selectedGame.year} · Entwickler: ${selectedGame.developer}`;
+if (info) {
+    info.textContent =
+        `${selectedGame.genre} · ${selectedGame.year} · Entwickler: ${selectedGame.developer}`;
+
+    const requirements = selectedGame.requirements;
+
+    if (requirements) {
+        const formatRequirements = (data) =>
+            `Betriebssystem: ${data.os}
+CPU: ${data.cpu}
+RAM: ${data.ram}
+Grafikkarte: ${data.gpu}
+Speicher: ${data.storage}`;
+
+        info.textContent +=
+            "\n\nMINDESTANFORDERUNGEN\n" +
+            formatRequirements(requirements.minimum) +
+            "\n\nEMPFOHLEN\n" +
+            formatRequirements(requirements.recommended);
     }
+}
 
     if (price) {
         price.textContent =
