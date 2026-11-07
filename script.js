@@ -2,125 +2,138 @@
 "use strict";
 
 /* =====================================
-   DOWNLOADGAMES – TESTVERSION
+   DOWNLOADGAMES – VERBESSERTE TESTVERSION
 ===================================== */
 
 // TEST-ADMINZUGANG
+// ACHTUNG: Auf GitHub Pages sind diese Daten öffentlich!
 const ADMIN_ID = "ADMINPOWER856545654366353";
-const ADMIN_PASSWORD = "A".repeat(900);
+const ADMIN_PASSWORD = "zizou3215698";
 
-// SPIELE
-const games = [
-  {
-    id: "visage",
-    name: "Visage",
-    price: 19.99,
-    points: 2000,
-    genre: "Psychological Horror",
-    year: 2020,
-    developer: "SadSquare Studio",
-    description: "Ein atmosphärisches psychologisches Horrorspiel.",
-    icon: "👻",
-    downloadUrl: "Actiongames/Visage.zip"
-  },
-  {
-    id: "dark-house",
-    name: "Dark House",
-    price: 9.99,
-    points: 1000,
-    genre: "Horror",
-    year: 2024,
-    developer: "DownloadGames",
-    description: "Erkunde ein geheimnisvolles Haus.",
-    icon: "🏚️",
-    downloadUrl: ""
-  },
-  {
-    id: "lost-forest",
-    name: "Lost Forest",
-    price: 14.99,
-    points: 1500,
-    genre: "Adventure",
-    year: 2024,
-    developer: "DownloadGames",
-    description: "Finde deinen Weg durch einen dunklen Wald.",
-    icon: "🌲",
-    downloadUrl: ""
-  },
-  {
-    id: "nightmare",
-    name: "Nightmare",
-    price: 4.99,
-    points: 500,
-    genre: "Horror",
-    year: 2024,
-    developer: "DownloadGames",
-    description: "Ein kurzes Horrorabenteuer.",
-    icon: "🌙",
-    downloadUrl: ""
-  },
-  {
-    id: "deep-ocean",
-    name: "Deep Ocean",
-    price: 7.99,
-    points: 800,
-    genre: "Adventure",
-    year: 2024,
-    developer: "DownloadGames",
-    description: "Entdecke die Geheimnisse des Ozeans.",
-    icon: "🌊",
-    downloadUrl: ""
-  }
-];
-
-/* =====================================
-   DATENSPEICHERUNG
-===================================== */
-
-function load(key, fallback) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
+// Prüfen, ob games.js geladen wurde
+if (typeof games === "undefined" || !Array.isArray(games)) {
+    throw new Error(
+        "games.js fehlt! Prüfe den Pfad in deiner index.html."
+    );
 }
 
-let points = load("dg_points", 0);
-let purchasedGames = load("dg_purchased", []);
-let cart = load("dg_cart", []);
+/* =====================================
+   HILFSFUNKTIONEN
+===================================== */
+
+function element(id) {
+    return document.getElementById(id);
+}
+
+function load(key, fallback) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value ?? fallback;
+    } catch (error) {
+        console.error("Fehler beim Laden:", key, error);
+        return fallback;
+    }
+}
+
+function save(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch (error) {
+        console.error("Fehler beim Speichern:", key, error);
+        alert("Daten konnten nicht gespeichert werden.");
+        return false;
+    }
+}
+
+/* =====================================
+   DATEN LADEN
+===================================== */
+
 let accounts = load("dg_accounts", {});
 let comments = load("dg_comments", {});
 let keys = load("dg_keys", []);
+let cart = load("dg_cart", []);
 let currentUser = load("dg_currentUser", null);
+
+if (!accounts || typeof accounts !== "object" || Array.isArray(accounts)) {
+    accounts = {};
+}
+
+if (!comments || typeof comments !== "object") comments = {};
+if (!Array.isArray(keys)) keys = [];
+if (!Array.isArray(cart)) cart = [];
+
+let guestPoints = Number(load("dg_points", 0)) || 0;
+let guestPurchased = load("dg_purchased", []);
+
+if (!Array.isArray(guestPurchased)) {
+    guestPurchased = [];
+}
+
+if (currentUser && !accounts[currentUser]) {
+    currentUser = null;
+}
+
+let points = currentUser
+    ? Number(accounts[currentUser].points ?? guestPoints) || 0
+    : guestPoints;
+
+let purchasedGames = currentUser
+    ? accounts[currentUser].purchasedGames || []
+    : guestPurchased;
+
+if (!Array.isArray(purchasedGames)) {
+    purchasedGames = [];
+}
 
 let isAdmin = false;
 let selectedGame = null;
 
-function saveAll() {
-  localStorage.setItem("dg_points", JSON.stringify(points));
-  localStorage.setItem("dg_purchased", JSON.stringify(purchasedGames));
-  localStorage.setItem("dg_cart", JSON.stringify(cart));
-  localStorage.setItem("dg_accounts", JSON.stringify(accounts));
-  localStorage.setItem("dg_comments", JSON.stringify(comments));
-  localStorage.setItem("dg_keys", JSON.stringify(keys));
-  localStorage.setItem("dg_currentUser", JSON.stringify(currentUser));
-}
+/* =====================================
+   DATEN SPEICHERN
+===================================== */
 
-function updatePoints() {
-  document.getElementById("points").textContent =
-    Math.floor(points).toLocaleString("de-DE");
+function saveAll() {
+    if (currentUser && accounts[currentUser]) {
+        accounts[currentUser].points = points;
+        accounts[currentUser].purchasedGames = [...purchasedGames];
+    } else {
+        guestPoints = points;
+        guestPurchased = [...purchasedGames];
+    }
+
+    const success =
+        save("dg_accounts", accounts) &&
+        save("dg_comments", comments) &&
+        save("dg_keys", keys) &&
+        save("dg_cart", cart) &&
+        save("dg_currentUser", currentUser) &&
+        save("dg_points", guestPoints) &&
+        save("dg_purchased", guestPurchased);
+
+    return success;
 }
 
 /* =====================================
-   DEMO-PUNKTE
+   PUNKTE-SYSTEM
 ===================================== */
 
-// +500 Punkte pro Sekunde
+function updatePoints() {
+    const output = element("points");
+
+    if (output) {
+        output.textContent =
+            Math.floor(points).toLocaleString("de-DE");
+    }
+}
+
+// DEMO: 500 Punkte pro Sekunde
+// Für eine echte Website muss das serverseitig laufen.
 setInterval(() => {
-  points += 500;
-  updatePoints();
-  saveAll();
+    points += 500;
+    updatePoints();
+    saveAll();
 }, 1000);
 
 /* =====================================
@@ -128,118 +141,134 @@ setInterval(() => {
 ===================================== */
 
 function renderGames(filter = "") {
-  const grid = document.getElementById("gameGrid");
-  grid.innerHTML = "";
+    const grid = element("gameGrid");
 
-  games
-    .filter(game =>
-      game.name.toLowerCase().includes(filter.toLowerCase())
-    )
-    .forEach(game => {
+    if (!grid) return;
 
-      const card = document.createElement("article");
-      card.className = "game-card";
+    grid.innerHTML = "";
 
-      const cover = document.createElement("div");
-      cover.className = "game-cover";
-      cover.textContent = game.icon;
+    const search = String(filter).trim().toLowerCase();
 
-      const title = document.createElement("h3");
-      title.textContent = game.name;
+    const filteredGames = games.filter(game =>
+        String(game.name).toLowerCase().includes(search) ||
+        String(game.genre).toLowerCase().includes(search)
+    );
 
-      const description = document.createElement("p");
-      description.textContent =
-        game.genre + " · " + game.year;
+    if (filteredGames.length === 0) {
+        grid.textContent = "Keine Spiele gefunden.";
+        return;
+    }
 
-      const price = document.createElement("p");
-      price.textContent =
-        game.price.toFixed(2) + " €";
+    filteredGames.forEach(game => {
+        const card = document.createElement("article");
+        card.className = "game-card";
 
-      const button = document.createElement("button");
-      button.textContent = "Details ansehen";
+        const cover = document.createElement("div");
+        cover.className = "game-cover";
+        cover.textContent = game.icon || "🎮";
 
-      button.onclick = () => openGame(game.id);
+        const title = document.createElement("h3");
+        title.textContent = game.name;
 
-      card.append(
-        cover,
-        title,
-        description,
-        price,
-        button
-      );
+        const description = document.createElement("p");
+        description.textContent =
+            `${game.genre} · ${game.year}`;
 
-      grid.appendChild(card);
+        const price = document.createElement("p");
+        price.textContent =
+            `${Number(game.price).toFixed(2)} €`;
+
+        const button = document.createElement("button");
+        button.textContent = "Details ansehen";
+        button.addEventListener("click", () => openGame(game.id));
+
+        card.append(cover, title, description, price, button);
+        grid.appendChild(card);
     });
 }
 
-document.getElementById("searchInput").addEventListener(
-  "input",
-  event => renderGames(event.target.value)
-);
+const searchInput = element("searchInput");
+
+if (searchInput) {
+    searchInput.addEventListener("input", event => {
+        renderGames(event.target.value);
+    });
+}
 
 /* =====================================
    SPIELDETAILS
 ===================================== */
 
 function openGame(id) {
+    selectedGame = games.find(game => game.id === id);
 
-  selectedGame = games.find(game => game.id === id);
-
-  if (!selectedGame) return;
-
-  document.getElementById("detailTitle").textContent =
-    selectedGame.name;
-
-  document.getElementById("detailDescription").textContent =
-    selectedGame.description;
-
-  document.getElementById("detailInfo").textContent =
-    selectedGame.genre + " · " +
-    selectedGame.year + " · Entwickler: " +
-    selectedGame.developer;
-
-  document.getElementById("detailPrice").textContent =
-    selectedGame.price.toFixed(2) +
-    " € · " + selectedGame.points + " Punkte";
-
-  document.getElementById("buyButton").onclick = buyGame;
-
-  document.getElementById("cartButton").onclick = () =>
-    addToCart(selectedGame.id);
-
-  const downloadButton =
-    document.getElementById("downloadButton");
-
-  const ownsGame =
-    purchasedGames.includes(selectedGame.id);
-
-  downloadButton.classList.toggle(
-    "hidden",
-    !ownsGame
-  );
-
-  downloadButton.onclick = () => {
-
-    if (selectedGame.downloadUrl) {
-      window.open(
-        selectedGame.downloadUrl,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    } else {
-      alert("Für dieses Spiel ist noch kein Download hinterlegt.");
+    if (!selectedGame) {
+        alert("Spiel nicht gefunden.");
+        return;
     }
-  };
 
-  document.getElementById("gameModal")
-    .classList.remove("hidden");
+    const title = element("detailTitle");
+    const description = element("detailDescription");
+    const info = element("detailInfo");
+    const price = element("detailPrice");
+    const buyButton = element("buyButton");
+    const cartButton = element("cartButton");
+    const downloadButton = element("downloadButton");
+    const modal = element("gameModal");
 
-  renderComments();
+    if (title) title.textContent = selectedGame.name;
+
+    if (description) {
+        description.textContent = selectedGame.description;
+    }
+
+    if (info) {
+        info.textContent =
+            `${selectedGame.genre} · ${selectedGame.year} · Entwickler: ${selectedGame.developer}`;
+    }
+
+    if (price) {
+        price.textContent =
+            `${Number(selectedGame.price).toFixed(2)} € · ${selectedGame.points} Punkte`;
+    }
+
+    if (buyButton) {
+        buyButton.onclick = buyGame;
+    }
+
+    if (cartButton) {
+        cartButton.onclick = () => addToCart(selectedGame.id);
+    }
+
+    const ownsGame = purchasedGames.includes(selectedGame.id);
+
+    if (downloadButton) {
+        downloadButton.classList.toggle("hidden", !ownsGame);
+
+        downloadButton.onclick = () => {
+            if (!purchasedGames.includes(selectedGame.id)) {
+                alert("Du musst dieses Spiel zuerst freischalten.");
+                return;
+            }
+
+            if (typeof startDownload !== "function") {
+                alert("downloads.js wurde nicht geladen.");
+                return;
+            }
+
+            startDownload(selectedGame.id);
+        };
+    }
+
+    if (modal) {
+        modal.classList.remove("hidden");
+    }
+
+    renderComments();
 }
 
 function closeGame() {
-  document.getElementById("gameModal")
-    .classList.add("hidden");
+    element("gameModal")?.classList.add("hidden");
 }
 
 /* =====================================
@@ -247,38 +276,40 @@ function closeGame() {
 ===================================== */
 
 function buyGame() {
+    if (!selectedGame) return;
 
-  if (!selectedGame) return;
+    if (!currentUser) {
+        alert("Bitte zuerst anmelden.");
+        showAuthWindow();
+        return;
+    }
 
-  if (!currentUser) {
-    alert("Bitte zuerst anmelden.");
-    return;
-  }
+    if (purchasedGames.includes(selectedGame.id)) {
+        alert("Du besitzt dieses Spiel bereits!");
+        return;
+    }
 
-  if (purchasedGames.includes(selectedGame.id)) {
-    alert("Du besitzt dieses Spiel bereits!");
-    return;
-  }
+    const price = Number(selectedGame.points);
 
-  if (points < selectedGame.points) {
-    alert("Du hast nicht genügend Punkte!");
-    return;
-  }
+    if (!Number.isFinite(price) || price < 0) {
+        alert("Ungültiger Spielpreis.");
+        return;
+    }
 
-  points -= selectedGame.points;
+    if (points < price) {
+        alert("Du hast nicht genügend Punkte!");
+        return;
+    }
 
-  purchasedGames.push(selectedGame.id);
+    points -= price;
+    purchasedGames.push(selectedGame.id);
 
-  accounts[currentUser].purchasedGames = [
-    ...purchasedGames
-  ];
+    saveAll();
+    updatePoints();
 
-  saveAll();
-  updatePoints();
+    alert("Spiel erfolgreich freigeschaltet!");
 
-  alert("Spiel erfolgreich freigeschaltet!");
-
-  openGame(selectedGame.id);
+    openGame(selectedGame.id);
 }
 
 /* =====================================
@@ -286,236 +317,221 @@ function buyGame() {
 ===================================== */
 
 function addToCart(id) {
-
-  if (!cart.includes(id)) {
-    cart.push(id);
-  }
-
-  saveAll();
-  renderCart();
-
-  alert("Spiel wurde zum Warenkorb hinzugefügt.");
-}
-
-function renderCart() {
-
-  const container =
-    document.getElementById("cartItems");
-
-  container.innerHTML = "";
-
-  let total = 0;
-
-  cart.forEach(id => {
-
     const game = games.find(item => item.id === id);
 
     if (!game) return;
 
-    total += game.price;
+    if (cart.includes(id)) {
+        alert("Dieses Spiel ist bereits im Warenkorb.");
+        return;
+    }
 
-    const item = document.createElement("div");
+    cart.push(id);
 
-    item.textContent =
-      game.name + " – " +
-      game.price.toFixed(2) + " € ";
+    saveAll();
+    renderCart();
 
-    const remove = document.createElement("button");
+    alert("Spiel wurde zum Warenkorb hinzugefügt.");
+}
 
-    remove.textContent = "Entfernen";
+function renderCart() {
+    const container = element("cartItems");
+    const totalElement = element("cartTotal");
 
-    remove.onclick = () => {
+    if (!container || !totalElement) return;
 
-      cart = cart.filter(itemId => itemId !== id);
+    container.innerHTML = "";
 
-      saveAll();
-      renderCart();
-    };
+    let total = 0;
 
-    item.appendChild(remove);
+    cart.forEach(id => {
+        const game = games.find(item => item.id === id);
 
-    container.appendChild(item);
-  });
+        if (!game) return;
 
-  document.getElementById("cartTotal").textContent =
-    total.toFixed(2).replace(".", ",") + " €";
+        total += Number(game.price) || 0;
+
+        const item = document.createElement("div");
+
+        const name = document.createElement("span");
+        name.textContent =
+            `${game.name} – ${Number(game.price).toFixed(2)} €`;
+
+        const remove = document.createElement("button");
+        remove.textContent = "Entfernen";
+
+        remove.onclick = () => {
+            cart = cart.filter(itemId => itemId !== id);
+            saveAll();
+            renderCart();
+        };
+
+        item.append(name, remove);
+        container.appendChild(item);
+    });
+
+    totalElement.textContent =
+        total.toFixed(2).replace(".", ",") + " €";
 }
 
 function toggleCart() {
-
-  document.getElementById("cartSection")
-    .classList.toggle("hidden");
-
-  renderCart();
+    element("cartSection")?.classList.toggle("hidden");
+    renderCart();
 }
 
 function clearCart() {
-
-  cart = [];
-
-  saveAll();
-  renderCart();
+    cart = [];
+    saveAll();
+    renderCart();
 }
 
 /* =====================================
-   PASSWORTVERSCHLÜSSELUNG
+   PASSWORT-HASHING
 ===================================== */
 
+// Nur für die lokale Testversion.
+// SHA-256 allein ist keine sichere Passwortspeicherung.
 async function hashPassword(password) {
+    if (!crypto.subtle) {
+        throw new Error(
+            "Passwortfunktion nicht verfügbar. Bitte HTTPS verwenden."
+        );
+    }
 
-  if (!crypto.subtle) {
-    throw new Error(
-      "Bitte Website über localhost öffnen."
-    );
-  }
+    const data = new TextEncoder().encode(password);
+    const hash = await crypto.subtle.digest("SHA-256", data);
 
-  const data = new TextEncoder().encode(password);
-
-  const hash = await crypto.subtle.digest(
-    "SHA-256",
-    data
-  );
-
-  return Array.from(new Uint8Array(hash))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
+    return Array.from(new Uint8Array(hash))
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
 }
 
 /* =====================================
-   BENUTZERKONTEN
+   REGISTRIERUNG UND LOGIN
 ===================================== */
 
 function showAuthWindow() {
-  document.getElementById("authModal")
-    .classList.remove("hidden");
+    element("authModal")?.classList.remove("hidden");
 }
 
 function hideAuthWindow() {
-  document.getElementById("authModal")
-    .classList.add("hidden");
+    element("authModal")?.classList.add("hidden");
 }
 
 async function register() {
+    const username =
+        element("authUsername")?.value.trim() || "";
 
-  const username =
-    document.getElementById("authUsername").value.trim();
+    const password =
+        element("authPassword")?.value || "";
 
-  const password =
-    document.getElementById("authPassword").value;
+    const message = element("authMessage");
 
-  const message =
-    document.getElementById("authMessage");
+    if (!message) return;
 
-  if (username.length < 3 || password.length < 6) {
+    if (username.length < 3 || password.length < 6) {
+        message.textContent =
+            "Benutzername: mindestens 3 Zeichen. Passwort: mindestens 6 Zeichen.";
+        return;
+    }
 
-    message.textContent =
-      "Benutzername: mindestens 3 Zeichen. Passwort: mindestens 6 Zeichen.";
+    if (Object.prototype.hasOwnProperty.call(accounts, username)) {
+        message.textContent =
+            "Dieser Benutzername ist bereits vergeben.";
+        return;
+    }
 
-    return;
-  }
+    try {
+        accounts[username] = {
+            passwordHash: await hashPassword(password),
+            points: 0,
+            purchasedGames: []
+        };
 
-  if (Object.prototype.hasOwnProperty.call(accounts, username)) {
+        saveAll();
 
-    message.textContent =
-      "Dieser Benutzername ist bereits vergeben.";
+        message.textContent =
+            "Registrierung erfolgreich! Du kannst dich jetzt anmelden.";
 
-    return;
-  }
-
-  try {
-
-    accounts[username] = {
-      passwordHash: await hashPassword(password),
-      purchasedGames: []
-    };
-
-    saveAll();
-
-    message.textContent =
-      "Registrierung erfolgreich! Du kannst dich jetzt anmelden.";
-
-  } catch (error) {
-
-    message.textContent = error.message;
-  }
+    } catch (error) {
+        message.textContent = error.message;
+    }
 }
 
 async function login() {
+    const username =
+        element("authUsername")?.value.trim() || "";
 
-  const username =
-    document.getElementById("authUsername").value.trim();
+    const password =
+        element("authPassword")?.value || "";
 
-  const password =
-    document.getElementById("authPassword").value;
+    const message = element("authMessage");
 
-  const message =
-    document.getElementById("authMessage");
+    if (!message) return;
 
-  if (!accounts[username]) {
-
-    message.textContent =
-      "Benutzerkonto nicht gefunden.";
-
-    return;
-  }
-
-  try {
-
-    const hash = await hashPassword(password);
-
-    if (hash !== accounts[username].passwordHash) {
-
-      message.textContent = "Falsches Passwort.";
-
-      return;
+    if (!Object.prototype.hasOwnProperty.call(accounts, username)) {
+        message.textContent = "Benutzerkonto nicht gefunden.";
+        return;
     }
 
-    currentUser = username;
+    try {
+        const hash = await hashPassword(password);
 
-    purchasedGames =
-      accounts[username].purchasedGames || [];
+        if (hash !== accounts[username].passwordHash) {
+            message.textContent = "Falsches Passwort.";
+            return;
+        }
 
-    saveAll();
+        // Vor dem Kontowechsel den bisherigen Stand sichern.
+        saveAll();
 
-    updateLoginDisplay();
+        currentUser = username;
+        points = Number(accounts[username].points) || 0;
 
-    hideAuthWindow();
+        purchasedGames = Array.isArray(accounts[username].purchasedGames)
+            ? [...accounts[username].purchasedGames]
+            : [];
 
-  } catch (error) {
+        saveAll();
+        updatePoints();
+        updateLoginDisplay();
+        renderGames();
+        renderCart();
+        hideAuthWindow();
 
-    message.textContent = error.message;
-  }
+        message.textContent = "";
+
+    } catch (error) {
+        message.textContent = error.message;
+    }
 }
 
 function updateLoginDisplay() {
+    const button = element("loginButton");
 
-  const button =
-    document.getElementById("loginButton");
+    if (!button) return;
 
-  if (currentUser) {
-
-    button.textContent =
-      "Logout (" + currentUser + ")";
-
-    button.onclick = logout;
-
-  } else {
-
-    button.textContent = "Login";
-
-    button.onclick = showAuthWindow;
-  }
+    if (currentUser) {
+        button.textContent = `Logout (${currentUser})`;
+        button.onclick = logout;
+    } else {
+        button.textContent = "Login";
+        button.onclick = showAuthWindow;
+    }
 }
 
 function logout() {
+    saveAll();
 
-  currentUser = null;
+    currentUser = null;
+    points = guestPoints;
+    purchasedGames = [...guestPurchased];
 
-  purchasedGames = [];
+    saveAll();
 
-  saveAll();
-
-  updateLoginDisplay();
+    updatePoints();
+    updateLoginDisplay();
+    renderGames();
 }
 
 /* =====================================
@@ -523,55 +539,59 @@ function logout() {
 ===================================== */
 
 function renderComments() {
+    const container = element("comments");
 
-  const container =
-    document.getElementById("comments");
+    if (!container) return;
 
-  container.innerHTML = "";
+    container.innerHTML = "";
 
-  if (!selectedGame) return;
+    if (!selectedGame) return;
 
-  const list =
-    comments[selectedGame.id] || [];
+    const list = comments[selectedGame.id] || [];
 
-  list.forEach(comment => {
+    if (list.length === 0) {
+        container.textContent = "Noch keine Kommentare vorhanden.";
+        return;
+    }
 
-    const p = document.createElement("p");
-
-    p.textContent =
-      comment.user + ": " + comment.text;
-
-    container.appendChild(p);
-  });
+    list.forEach(comment => {
+        const p = document.createElement("p");
+        p.textContent = `${comment.user}: ${comment.text}`;
+        container.appendChild(p);
+    });
 }
 
 function addComment() {
+    if (!currentUser) {
+        alert("Bitte melde dich zuerst an.");
+        return;
+    }
 
-  if (!currentUser) {
-    alert("Bitte melde dich zuerst an.");
-    return;
-  }
+    if (!selectedGame) return;
 
-  if (!selectedGame) return;
+    const input = element("commentInput");
+    if (!input) return;
 
-  const input =
-    document.getElementById("commentInput");
+    const text = input.value.trim();
 
-  const text = input.value.trim();
+    if (!text) return;
 
-  if (!text) return;
+    if (text.length > 500) {
+        alert("Kommentare dürfen maximal 500 Zeichen lang sein.");
+        return;
+    }
 
-  comments[selectedGame.id] ??= [];
+    comments[selectedGame.id] ??= [];
 
-  comments[selectedGame.id].push({
-    user: currentUser,
-    text: text
-  });
+    comments[selectedGame.id].push({
+        user: currentUser,
+        text: text
+    });
 
-  input.value = "";
+    input.value = "";
 
-  saveAll();
-  renderComments();
+    saveAll();
+    renderComments();
 }
 
 /* =====================================
@@ -579,41 +599,30 @@ function addComment() {
 ===================================== */
 
 function showAdminLogin() {
-
-  document.getElementById("adminLoginModal")
-    .classList.remove("hidden");
+    element("adminLoginModal")?.classList.remove("hidden");
 }
 
 function closeAdminLogin() {
-
-  document.getElementById("adminLoginModal")
-    .classList.add("hidden");
+    element("adminLoginModal")?.classList.add("hidden");
 }
 
 function adminLogin() {
+    const id = element("adminId")?.value || "";
+    const password = element("adminPassword")?.value || "";
+    const message = element("adminLoginMessage");
 
-  const id =
-    document.getElementById("adminId").value;
+    if (!message) return;
 
-  const password =
-    document.getElementById("adminPassword").value;
+    if (id !== ADMIN_ID || password !== ADMIN_PASSWORD) {
+        message.textContent = "Admin-ID oder Passwort falsch.";
+        return;
+    }
 
-  const message =
-    document.getElementById("adminLoginMessage");
+    isAdmin = true;
+    message.textContent = "";
 
-  if (id !== ADMIN_ID || password !== ADMIN_PASSWORD) {
-
-    message.textContent =
-      "Admin-ID oder Passwort falsch.";
-
-    return;
-  }
-
-  isAdmin = true;
-
-  closeAdminLogin();
-
-  openAdminDashboard();
+    closeAdminLogin();
+    openAdminDashboard();
 }
 
 /* =====================================
@@ -621,37 +630,30 @@ function adminLogin() {
 ===================================== */
 
 function openAdminDashboard() {
+    if (!isAdmin) return;
 
-  if (!isAdmin) return;
+    const select = element("adminGameSelect");
 
-  const select =
-    document.getElementById("adminGameSelect");
+    if (!select) return;
 
-  select.innerHTML = "";
+    select.innerHTML = "";
 
-  games.forEach(game => {
+    games.forEach(game => {
+        const option = document.createElement("option");
+        option.value = game.id;
+        option.textContent = game.name;
+        select.appendChild(option);
+    });
 
-    const option = document.createElement("option");
+    element("adminDashboard")?.classList.remove("hidden");
 
-    option.value = game.id;
-    option.textContent = game.name;
-
-    select.appendChild(option);
-  });
-
-  document.getElementById("adminDashboard")
-    .classList.remove("hidden");
-
-  renderAdminKeys();
-  renderAdminGames();
+    renderAdminKeys();
+    renderAdminGames();
 }
 
 function adminLogout() {
-
-  isAdmin = false;
-
-  document.getElementById("adminDashboard")
-    .classList.add("hidden");
+    isAdmin = false;
+    element("adminDashboard")?.classList.add("hidden");
 }
 
 /* =====================================
@@ -659,66 +661,65 @@ function adminLogout() {
 ===================================== */
 
 function randomKey() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const random = new Uint32Array(20);
 
-  const chars =
-    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    crypto.getRandomValues(random);
 
-  const random = new Uint32Array(20);
-
-  crypto.getRandomValues(random);
-
-  return Array.from(random, number =>
-    chars[number % chars.length]
-  ).join("").match(/.{1,5}/g).join("-");
+    return Array.from(random, number =>
+        chars[number % chars.length]
+    ).join("").match(/.{1,5}/g).join("-");
 }
 
 function generateKey() {
+    if (!isAdmin) return;
 
-  if (!isAdmin) return;
+    const gameId = element("adminGameSelect")?.value;
 
-  const gameId =
-    document.getElementById("adminGameSelect").value;
+    if (!games.some(game => game.id === gameId)) return;
 
-  const key = randomKey();
+    const key = randomKey();
 
-  keys.push({
-    key: key,
-    gameId: gameId,
-    active: true,
-    used: false,
-    createdAt: new Date().toISOString()
-  });
+    keys.push({
+        key,
+        gameId,
+        active: true,
+        used: false,
+        createdAt: new Date().toISOString()
+    });
 
-  saveAll();
+    saveAll();
 
-  const area =
-    document.getElementById("newKeyArea");
+    const area = element("newKeyArea");
 
-  area.innerHTML = "";
+    if (area) {
+        area.innerHTML = "";
 
-  const heading = document.createElement("h3");
+        const heading = document.createElement("h3");
+        heading.textContent = "Neuer Produktschlüssel";
 
-  heading.textContent = "Neuer Produktschlüssel";
+        const value = document.createElement("p");
+        value.className = "key-text";
+        value.textContent = key;
 
-  const value = document.createElement("p");
+        const copy = document.createElement("button");
+        copy.textContent = "Schlüssel kopieren";
 
-  value.className = "key-text";
-  value.textContent = key;
+        copy.onclick = () => {
+            if (!navigator.clipboard) {
+                alert("Kopieren ist hier nicht verfügbar.");
+                return;
+            }
 
-  const copy = document.createElement("button");
+            navigator.clipboard.writeText(key)
+                .then(() => alert("Schlüssel kopiert."))
+                .catch(() => alert("Kopieren nicht möglich."));
+        };
 
-  copy.textContent = "Schlüssel kopieren";
+        area.append(heading, value, copy);
+    }
 
-  copy.onclick = () => {
-
-    navigator.clipboard.writeText(key)
-      .then(() => alert("Schlüssel kopiert."))
-      .catch(() => alert("Kopieren nicht möglich."));
-  };
-
-  area.append(heading, value, copy);
-
-  renderAdminKeys();
+    renderAdminKeys();
 }
 
 /* =====================================
@@ -726,59 +727,48 @@ function generateKey() {
 ===================================== */
 
 function redeemKey() {
+    const input = element("redeemInput");
+    const message = element("redeemMessage");
 
-  const input =
-    document.getElementById("redeemInput");
+    if (!input || !message) return;
 
-  const message =
-    document.getElementById("redeemMessage");
+    const value = input.value.trim().toUpperCase();
 
-  const value =
-    input.value.trim().toUpperCase();
+    if (!currentUser) {
+        message.textContent = "Bitte zuerst anmelden.";
+        return;
+    }
 
-  if (!currentUser) {
+    const key = keys.find(item => item.key === value);
+
+    if (!key || !key.active || key.used) {
+        message.textContent =
+            "Ungültiger, deaktivierter oder bereits verwendeter Schlüssel.";
+        return;
+    }
+
+    if (!games.some(game => game.id === key.gameId)) {
+        message.textContent = "Das zugehörige Spiel existiert nicht.";
+        return;
+    }
+
+    if (purchasedGames.includes(key.gameId)) {
+        message.textContent = "Du besitzt dieses Spiel bereits.";
+        return;
+    }
+
+    key.used = true;
+    purchasedGames.push(key.gameId);
+
+    saveAll();
+
+    input.value = "";
 
     message.textContent =
-      "Bitte zuerst anmelden.";
+        "Erfolgreich eingelöst! Das Spiel wurde freigeschaltet.";
 
-    return;
-  }
-
-  const key =
-    keys.find(item => item.key === value);
-
-  if (!key || !key.active || key.used) {
-
-    message.textContent =
-      "Ungültiger, deaktivierter oder bereits verwendeter Schlüssel.";
-
-    return;
-  }
-
-  if (purchasedGames.includes(key.gameId)) {
-
-    message.textContent =
-      "Du besitzt dieses Spiel bereits.";
-
-    return;
-  }
-
-  key.used = true;
-
-  purchasedGames.push(key.gameId);
-
-  accounts[currentUser].purchasedGames = [
-    ...purchasedGames
-  ];
-
-  saveAll();
-
-  input.value = "";
-
-  message.textContent =
-    "Erfolgreich eingelöst! Das Spiel wurde freigeschaltet.";
-
-  openGame(key.gameId);
+    renderAdminKeys();
+    openGame(key.gameId);
 }
 
 /* =====================================
@@ -786,65 +776,55 @@ function redeemKey() {
 ===================================== */
 
 function renderAdminKeys() {
+    if (!isAdmin) return;
 
-  if (!isAdmin) return;
+    const container = element("adminKeyList");
 
-  const container =
-    document.getElementById("adminKeyList");
+    if (!container) return;
 
-  container.innerHTML = "";
+    container.innerHTML = "";
 
-  keys.forEach((key, index) => {
+    keys.forEach((key, index) => {
+        const game = games.find(item => item.id === key.gameId);
 
-    const game =
-      games.find(item => item.id === key.gameId);
+        const item = document.createElement("div");
 
-    const item = document.createElement("div");
+        const info = document.createElement("p");
+        info.className = "key-text";
+        info.textContent = key.key;
 
-    const info = document.createElement("p");
+        const status = document.createElement("p");
 
-    info.className = "key-text";
-    info.textContent = key.key;
+        status.textContent =
+            `${game?.name || "Unbekannt"} · ` +
+            (key.used
+                ? "Eingelöst"
+                : key.active
+                    ? "Aktiv"
+                    : "Deaktiviert");
 
-    const status = document.createElement("p");
+        item.append(info, status);
 
-    status.textContent =
-      (game?.name || "Unbekannt") + " · " +
-      (key.used
-        ? "Eingelöst"
-        : key.active
-          ? "Aktiv"
-          : "Deaktiviert");
+        if (key.active && !key.used) {
+            const deactivate = document.createElement("button");
+            deactivate.textContent = "Deaktivieren";
 
-    item.append(info, status);
+            deactivate.onclick = () => {
+                keys[index].active = false;
+                saveAll();
+                renderAdminKeys();
+            };
 
-    if (key.active && !key.used) {
+            item.appendChild(deactivate);
+        }
 
-      const deactivate =
-        document.createElement("button");
+        container.appendChild(item);
+    });
 
-      deactivate.textContent = "Deaktivieren";
-
-      deactivate.onclick = () => {
-
-        keys[index].active = false;
-
-        saveAll();
-
-        renderAdminKeys();
-      };
-
-      item.appendChild(deactivate);
+    if (keys.length === 0) {
+        container.textContent =
+            "Noch keine Produktschlüssel vorhanden.";
     }
-
-    container.appendChild(item);
-  });
-
-  if (keys.length === 0) {
-
-    container.textContent =
-      "Noch keine Produktschlüssel vorhanden.";
-  }
 }
 
 /* =====================================
@@ -852,33 +832,25 @@ function renderAdminKeys() {
 ===================================== */
 
 function grantFreeGame() {
+    if (!isAdmin) return;
 
-  if (!isAdmin) return;
+    if (!currentUser) {
+        alert("Bitte zuerst als normaler Benutzer anmelden.");
+        return;
+    }
 
-  if (!currentUser) {
+    const gameId = element("adminGameSelect")?.value;
 
-    alert("Bitte zuerst als normaler Benutzer anmelden.");
+    if (!games.some(game => game.id === gameId)) return;
 
-    return;
-  }
+    if (!purchasedGames.includes(gameId)) {
+        purchasedGames.push(gameId);
+    }
 
-  const gameId =
-    document.getElementById("adminGameSelect").value;
+    saveAll();
+    alert("Spiel wurde kostenlos freigeschaltet.");
 
-  if (!purchasedGames.includes(gameId)) {
-
-    purchasedGames.push(gameId);
-  }
-
-  accounts[currentUser].purchasedGames = [
-    ...purchasedGames
-  ];
-
-  saveAll();
-
-  alert(
-    "Spiel wurde für den aktuellen Benutzer kostenlos freigeschaltet."
-  );
+    renderGames();
 }
 
 /* =====================================
@@ -886,22 +858,22 @@ function grantFreeGame() {
 ===================================== */
 
 function renderAdminGames() {
+    if (!isAdmin) return;
 
-  const container =
-    document.getElementById("adminGameList");
+    const container = element("adminGameList");
 
-  container.innerHTML = "";
+    if (!container) return;
 
-  games.forEach(game => {
+    container.innerHTML = "";
 
-    const item = document.createElement("div");
+    games.forEach(game => {
+        const item = document.createElement("div");
 
-    item.textContent =
-      game.name + " – " +
-      game.price.toFixed(2) + " €";
+        item.textContent =
+            `${game.name} – ${Number(game.price).toFixed(2)} €`;
 
-    container.appendChild(item);
-  });
+        container.appendChild(item);
+    });
 }
 
 /* =====================================
@@ -912,3 +884,5 @@ updatePoints();
 updateLoginDisplay();
 renderGames();
 renderCart();
+
+console.log("DownloadGames erfolgreich gestartet.");
