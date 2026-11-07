@@ -8,7 +8,7 @@ const games = [
         points: 2000,
         genre: "Psychological Horror",
         year: 2020,
-        image: "",
+        image: "https://steamunlocked.org/wp-content/uploads/2019/01/visage-free-download-300x169.jpg",
         developer: "SadSquare Studio",
        description: "An ordinary suburban home becomes a suffocating labyrinth where every hallway, family photograph, and locked door hints at a history of murder, suicide, and breakdown. Visage is a first-person psychological horror experience built around dread rather than action, using long silences and domestic familiarity to make even a light switch feel threatening. Its house shifts subtly around the player, turning bedrooms, bathrooms, and basements into places that feel both recognisable and deeply wrong. The mood is relentlessly grim, with supernatural horrors arriving as unsettling intrusions instead of predictable jump-scare attractions.\n\nPlayers search the sprawling house for keys, documents, fuses, videotapes, and strange objects that unlock the stories of its former residents. Several major chapters follow different tragic families, each bringing its own visual identity, hauntings, puzzle logic, and terrifying pursuer; one may focus on warped dolls and mirrors, while another turns sound and darkness into weapons. There is no combat system to fall back on, so survival depends on observation, hiding when necessary, conserving light sources, and managing the protagonist’s sanity as darkness and paranormal events take their toll. Progress can be deliberately slow, and some puzzles demand close attention to item descriptions, environmental clues, and the house’s changing layout.\n\nWhat separates Visage from many modern horror games is its willingness to leave players uncomfortable, uncertain, and occasionally lost. The detailed home feels less like a level and more like an antagonistic presence, with oppressive sound design, realistic interiors, and disturbing imagery doing as much work as its ghosts. It shares the intimate, first-person unease of P.T. and Layers of Fear, but it is more demanding, more puzzle-heavy, and far less interested in guiding players from scare to scare. Horror veterans who enjoy patient exploration and oppressive atmosphere find a standout nightmare here, while newcomers should expect a difficult, deliberately disorienting experience rather than an accessible haunted-house ride.",
         icon: "👻",
@@ -38,7 +38,7 @@ const games = [
         developer: "DownloadGames",
         description: "Grief turns an ordinary house into a hostile maze in this first-person psychological horror story. You play a person trapped at home after a devastating loss, with every apparent exit feeding into stranger rooms, repeating corridors, and memories that refuse to stay buried. The fear comes less from conventional monsters than from oppressive silence, distorted domestic spaces, and the feeling that reality is quietly breaking down around you. Luto maintains a bleak, intimate tone throughout, treating anxiety, depression, and bereavement as central parts of its horror rather than simple background decoration.\n\nProgress revolves around carefully searching environments, reading clues, examining meaningful objects, and solving environmental puzzles that open the next unnerving path. There is no combat power fantasy to fall back on; vulnerability and observation drive the experience, so progress depends on noticing changes in familiar spaces and making sense of deliberately unsettling details. The house constantly reshapes itself, turning doors, hallways, and everyday possessions into tools for misdirection. Its pace favors tension and narrative discovery over action, although scripted scares and disturbing imagery ensure that the slower sections never feel entirely safe.\n\nWhat makes Luto stand out is its focused use of a single home as both a physical location and a portrait of a mind caught in mourning. It shares some DNA with P.T., Layers of Fear, and other looping first-person horror games, but its emotional emphasis gives the surreal imagery more weight than a mere haunted-house ride. The presentation leans into realistic interiors, harsh shadows, and subtle audiovisual tricks that make players question what they saw or heard a moment earlier. Horror fans who enjoy story-led, puzzle-focused experiences and psychological unease should find plenty to appreciate, while players seeking weapons, chases, or broad open-ended exploration may find its deliberately claustrophobic design less appealing.",
         icon: "👻",
-        downloadUrl: "https://download193.uploadhaven.com/1/application/zip/mwLF5vbHeUQ9zS72d2TELIuavg2AfrnTh78DVIAw.zip?key=ZWgutEhejBM9MG6rYVS4Eg&amp;expire=1794145487&amp;filename=Luto.v2025.10.15.zip"
+        downloadUrl: "https://download193.uploadhaven.com/1/application/zip/mwLF5vbHeUQ9zS72d2TELIuavg2AfrnTh78DVIAw.zip?key=e4eLtcGrjgsLmjMrx5YXtA&expire=1794152243&filename=Luto.v2025.10.15.zip"
     },
     {
         id: "Tormented Souls",
@@ -60,45 +60,23 @@ const games = [
         points: 800,
         genre: "Horror",
         year: 2024,
+        image: "	https://steamunlocked.org/wp-content/uploads/2018/06/outlast-2-free-download-300x169.jpg",
         developer: "DownloadGames",
         description: "Ein abgelegenes Tal in Arizona wird zu einem Gefängnis aus Schlamm, Gewalt und religiösem Terror. Du spielst Blake Langermann, einen freiberuflichen Kameramann, der nach einem Helikopterabsturz von seiner Frau getrennt wird. Gemeinsam hatten sie einen Mord untersucht, der mit der abgeschotteten Siedlung Temple Gate verbunden ist. Die Bewohner folgen den apokalyptischen Lehren des unberechenbaren Predigers Sullivan Knoth. Auf deinem Weg durch die Wildnis entdeckst du immer mehr Grausamkeiten, Paranoia und Wahnsinn. Anders als im ersten Outlast erkundest du Maisfelder, Minen, zerstörte Dörfer und albtraumhafte Erinnerungen an eine Schule, in denen Realität und Horror miteinander verschwimmen. Blake kann nicht kämpfen. Deshalb musst du dich verstecken, schleichen und rennen, sobald du entdeckt wirst. Deine Kamera ist dabei dein wichtigstes Werkzeug: Mit der Nachtsicht erkennst du Wege in völliger Dunkelheit, während das Mikrofon Geräusche und nahe Gefahren wahrnehmen kann. Beide Funktionen verbrauchen Batterien, die du unterwegs finden musst. Die Erkundung verläuft größtenteils linear, bietet aber zahlreiche Abzweigungen mit Dokumenten und Aufnahmen, die weitere Details über die Geschichte enthüllen. Verbände ermöglichen dir eine begrenzte Heilung nach Angriffen. Besonders anspruchsvoll sind die Verfolgungsjagden, bei denen du Fluchtwege lernen, durch enge Öffnungen kriechen, deine Ausdauer einteilen und auch in Panik die Orientierung behalten musst. Outlast 2 hebt sich durch sein ländliches Kult-Szenario und die Verbindung aus psychologischem Horror und Jumpscares hervor. Die körnige Nachtsicht der Kamera lässt selbst vertraute Orte fremd und bedrohlich wirken. Der Wechsel zwischen dem Albtraum in der Wüste und Blakes traumatischen Schulerinnerungen sorgt für eine verstörende, fragmentierte Geschichte. Das Spiel ist deutlich härter und grafischer als viele andere Horrorspiele und behandelt Themen und zeigt Bilder, die wirklich verstörend sein können. Fans von Amnesia, Alien: Isolation und dem ersten Outlast, die verletzliche Hauptfiguren, Stealth-Gameplay, intensive Fluchten und anhaltende Spannung mögen, finden hier ein intensives Horrorerlebnis. Neue Spieler sollten sich jedoch darauf einstellen, dass es nur wenige ruhige Momente gibt und Kämpfe keine Option sind.",
         icon: "👻",
         downloadUrl: "https://download191.uploadhaven.com/1/application/zip/bbIRqq07QA6wLQAZ6p6FknxgT4qBOZrfgcgGBKd1.zip?key=n_59rAfhwfCQjwz_Lo5Y-g&amp;expire=1794318736&amp;filename=Outlast2.zip"
     },
-        {
+     {
         id: "Outlast 2",
         name: "Outlast 2",
         price: 7.99,
         points: 800,
         genre: "Horror",
         year: 2024,
+        image: "https://steamunlocked.org/wp-content/uploads/2021/08/Tormented-Souls-Free-Download-650x366.png",
         developer: "DownloadGames",
-        description: "Entdecke die Geheimnisse des Ozeans.",
+        description: "Ein abgelegenes Tal in Arizona wird zu einem Gefängnis aus Schlamm, Gewalt und religiösem Terror. Du spielst Blake Langermann, einen freiberuflichen Kameramann, der nach einem Helikopterabsturz von seiner Frau getrennt wird. Gemeinsam hatten sie einen Mord untersucht, der mit der abgeschotteten Siedlung Temple Gate verbunden ist. Die Bewohner folgen den apokalyptischen Lehren des unberechenbaren Predigers Sullivan Knoth. Auf deinem Weg durch die Wildnis entdeckst du immer mehr Grausamkeiten, Paranoia und Wahnsinn. Anders als im ersten Outlast erkundest du Maisfelder, Minen, zerstörte Dörfer und albtraumhafte Erinnerungen an eine Schule, in denen Realität und Horror miteinander verschwimmen. Blake kann nicht kämpfen. Deshalb musst du dich verstecken, schleichen und rennen, sobald du entdeckt wirst. Deine Kamera ist dabei dein wichtigstes Werkzeug: Mit der Nachtsicht erkennst du Wege in völliger Dunkelheit, während das Mikrofon Geräusche und nahe Gefahren wahrnehmen kann. Beide Funktionen verbrauchen Batterien, die du unterwegs finden musst. Die Erkundung verläuft größtenteils linear, bietet aber zahlreiche Abzweigungen mit Dokumenten und Aufnahmen, die weitere Details über die Geschichte enthüllen. Verbände ermöglichen dir eine begrenzte Heilung nach Angriffen. Besonders anspruchsvoll sind die Verfolgungsjagden, bei denen du Fluchtwege lernen, durch enge Öffnungen kriechen, deine Ausdauer einteilen und auch in Panik die Orientierung behalten musst. Outlast 2 hebt sich durch sein ländliches Kult-Szenario und die Verbindung aus psychologischem Horror und Jumpscares hervor. Die körnige Nachtsicht der Kamera lässt selbst vertraute Orte fremd und bedrohlich wirken. Der Wechsel zwischen dem Albtraum in der Wüste und Blakes traumatischen Schulerinnerungen sorgt für eine verstörende, fragmentierte Geschichte. Das Spiel ist deutlich härter und grafischer als viele andere Horrorspiele und behandelt Themen und zeigt Bilder, die wirklich verstörend sein können. Fans von Amnesia, Alien: Isolation und dem ersten Outlast, die verletzliche Hauptfiguren, Stealth-Gameplay, intensive Fluchten und anhaltende Spannung mögen, finden hier ein intensives Horrorerlebnis. Neue Spieler sollten sich jedoch darauf einstellen, dass es nur wenige ruhige Momente gibt und Kämpfe keine Option sind.",
         icon: "👻",
         downloadUrl: "https://download191.uploadhaven.com/1/application/zip/bbIRqq07QA6wLQAZ6p6FknxgT4qBOZrfgcgGBKd1.zip?key=n_59rAfhwfCQjwz_Lo5Y-g&amp;expire=1794318736&amp;filename=Outlast2.zip"
-    },
-      {
-        id: "Outlast 2",
-        name: "Outlast 2",
-        price: 7.99,
-        points: 800,
-        genre: "Horror",
-        year: 2024,
-        developer: "DownloadGames",
-        description: "Entdecke die Geheimnisse des Ozeans.",
-        icon: "👻",
-        downloadUrl: "https://download191.uploadhaven.com/1/application/zip/bbIRqq07QA6wLQAZ6p6FknxgT4qBOZrfgcgGBKd1.zip?key=n_59rAfhwfCQjwz_Lo5Y-g&amp;expire=1794318736&amp;filename=Outlast2.zip"
-    },
-        {
-        id: "Outlast 2",
-        name: "Outlast 2",
-        price: 7.99,
-        points: 800,
-        genre: "Horror",
-        year: 2024,
-        developer: "DownloadGames",
-        description: "Entdecke die Geheimnisse des Ozeans.",
-        icon: "👻",
-        downloadUrl: "https://download191.uploadhaven.com/1/application/zip/bbIRqq07QA6wLQAZ6p6FknxgT4qBOZrfgcgGBKd1.zip?key=n_59rAfhwfCQjwz_Lo5Y-g&amp;expire=1794318736&amp;filename=Outlast2.zip"
-    }
+    },  
 ];
