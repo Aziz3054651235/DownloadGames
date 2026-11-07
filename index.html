@@ -2,274 +2,138 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>DownloadGames</title>
-
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DownloadGames</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header class="header">
+  <a class="logo" href="#">Download<span>Games</span></a>
 
-    <a href="#" class="logo">
-        Download<span>Games</span>
-    </a>
+  <input id="searchInput" type="search" placeholder="Spiele suchen...">
 
-    <div class="header-right">
-
-        <input
-            type="search"
-            id="searchInput"
-            placeholder="Spiele suchen..."
-        >
-
-        <div class="points-display">
-            ⭐ <span id="pointsBalance">0</span> Punkte
-        </div>
-
-        <button id="cartButton" class="header-button">
-            🛒 Warenkorb (<span id="cartCount">0</span>)
-        </button>
-
-        <button id="loginOpenButton" class="header-button login-header">
-            Einloggen
-        </button>
-
-    </div>
-
+  <div class="header-actions">
+    <span class="points">⭐ <b id="points">0</b></span>
+    <button onclick="toggleCart()">🛒 Warenkorb</button>
+    <button id="loginButton" onclick="showAuthWindow()">Login</button>
+    <button onclick="showAdminLogin()">⚙ Admin</button>
+  </div>
 </header>
 
-
-<!-- WARENKORB -->
-
-<section id="cartSection" class="cart-section" hidden>
-
-    <div class="section-heading">
-        <h2>Dein Warenkorb</h2>
-        <button id="closeCartButton" class="small-button">Schließen</button>
-    </div>
-
-    <div id="cartItems"></div>
-
-    <h3>Gesamt: <span id="cartTotal">0,00 €</span></h3>
-
-</section>
-
-
-<!-- STARTSEITE -->
-
 <main>
+  <section class="hero">
+    <h1>Deine Gaming-Welt</h1>
+    <p>Entdecke spannende Spiele bei DownloadGames.</p>
+  </section>
 
-    <section class="hero">
+  <section id="cartSection" class="panel hidden">
+    <h2>Dein Warenkorb</h2>
+    <div id="cartItems"></div>
+    <p>Gesamt: <b id="cartTotal">0,00 €</b></p>
+    <button onclick="clearCart()">Warenkorb leeren</button>
+    <button onclick="toggleCart()">Schließen</button>
+  </section>
 
-        <p class="hero-label">DEINE GAMING-WELT</p>
-
-        <h1>Entdecke deine nächsten Spiele.</h1>
-
-        <p>
-            Finde spannende Spiele, entdecke neue Welten
-            und erweitere deine Sammlung.
-        </p>
-
-    </section>
-
-
-    <section class="games-section">
-
-        <div class="section-heading">
-            <h2>Alle Spiele</h2>
-            <span id="gameCount">0 Spiele</span>
-        </div>
-
-        <div id="gamesContainer" class="games-grid"></div>
-
-        <p id="noResults" hidden>
-            Keine Spiele gefunden.
-        </p>
-
-    </section>
-
+  <h2 class="section-title">Alle Spiele</h2>
+  <section id="gameGrid" class="game-grid"></section>
 </main>
 
+<div id="gameModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close" onclick="closeGame()">✕</button>
 
-<!-- SPIEDETAILS -->
+    <h2 id="detailTitle"></h2>
+    <p id="detailDescription"></p>
+    <p id="detailInfo"></p>
+    <p id="detailPrice"></p>
 
-<div id="gameModal" class="modal" hidden>
-
-    <div class="modal-content">
-
-        <button id="closeGameModal" class="close-button">
-            &times;
-        </button>
-
-        <img id="modalImage" class="modal-image" src="" alt="Spielbild">
-
-        <div class="modal-information">
-
-            <h2 id="modalTitle"></h2>
-
-            <p id="modalDescription"></p>
-
-            <div class="details">
-
-                <p><strong>Genre:</strong> <span id="modalGenre"></span></p>
-                <p><strong>Jahr:</strong> <span id="modalYear"></span></p>
-                <p><strong>Entwickler:</strong> <span id="modalDeveloper"></span></p>
-                <p><strong>Plattform:</strong> <span id="modalPlatform"></span></p>
-                <p><strong>Altersempfehlung:</strong> <span id="modalAge"></span></p>
-
-            </div>
-
-
-            <section class="requirements">
-
-                <h3>Systemanforderungen</h3>
-
-                <p><strong>Betriebssystem:</strong> <span id="modalOS"></span></p>
-                <p><strong>Prozessor:</strong> <span id="modalCPU"></span></p>
-                <p><strong>RAM:</strong> <span id="modalRAM"></span></p>
-                <p><strong>Grafikkarte:</strong> <span id="modalGPU"></span></p>
-                <p><strong>Speicherplatz:</strong> <span id="modalStorage"></span></p>
-                <p><strong>Downloadgröße:</strong> <span id="modalSize"></span></p>
-
-            </section>
-
-
-            <div class="purchase-area">
-
-                <h3 id="modalPrice"></h3>
-
-                <button id="buyButton" class="buy-button">
-                    Mit Punkten kaufen
-                </button>
-
-                <button id="downloadButton" class="download-button" hidden>
-                    ⬇ Spiel herunterladen
-                </button>
-
-                <button id="addCartButton" class="cart-add-button">
-                    In den Warenkorb
-                </button>
-
-                <p id="buyMessage"></p>
-
-            </div>
-
-
-            <!-- KOMMENTARE -->
-
-            <section class="comments-section">
-
-                <h3>Spieler-Kommentare</h3>
-
-                <div id="commentsList"></div>
-
-                <div id="commentForm" hidden>
-
-                    <textarea
-                        id="commentInput"
-                        placeholder="Schreibe einen Kommentar..."
-                        maxlength="500"
-                    ></textarea>
-
-                    <button id="commentButton">
-                        Kommentar hinzufügen
-                    </button>
-
-                </div>
-
-                <p id="commentLoginMessage">
-                    Melde dich an, um Kommentare zu schreiben.
-                </p>
-
-            </section>
-
-        </div>
-
+    <div class="button-row">
+      <button id="buyButton">Mit Punkten kaufen</button>
+      <button id="cartButton">In den Warenkorb</button>
+      <button id="downloadButton" class="hidden">Download</button>
     </div>
 
+    <hr>
+
+    <h3>Produktschlüssel einlösen</h3>
+    <input id="redeemInput" placeholder="Produktschlüssel eingeben">
+    <button onclick="redeemKey()">Einlösen</button>
+    <p id="redeemMessage"></p>
+
+    <hr>
+
+    <h3>Kommentare</h3>
+    <div id="comments"></div>
+    <input id="commentInput" placeholder="Dein Kommentar">
+    <button onclick="addComment()">Kommentieren</button>
+  </div>
 </div>
 
+<div id="authModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close" onclick="hideAuthWindow()">✕</button>
 
-<!-- LOGIN UND REGISTRIERUNG -->
+    <h2>Anmelden / Registrieren</h2>
 
-<div id="authModal" class="modal auth-modal" hidden>
+    <input id="authUsername" placeholder="Benutzername">
+    <input id="authPassword" type="password" placeholder="Passwort">
 
-    <div class="auth-content">
+    <button onclick="login()">Anmelden</button>
+    <button onclick="register()">Registrieren</button>
 
-        <button id="closeAuthModal" class="close-button">
-            &times;
-        </button>
+    <p id="authMessage"></p>
+  </div>
+</div>
 
-        <h2 id="authTitle">Willkommen bei DownloadGames</h2>
+<div id="adminLoginModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close" onclick="closeAdminLogin()">✕</button>
 
-        <p class="auth-description">
-            Melde dich an oder erstelle ein neues Konto.
-        </p>
+    <h2>Admin-Anmeldung</h2>
 
-        <div class="auth-tabs">
+    <input id="adminId" placeholder="Admin-ID">
+    <input id="adminPassword" type="password" placeholder="Admin-Passwort">
 
-            <button id="showLoginButton" class="auth-tab active">
-                Einloggen
-            </button>
+    <button onclick="adminLogin()">Admin anmelden</button>
+    <p id="adminLoginMessage"></p>
+  </div>
+</div>
 
-            <button id="showRegisterButton" class="auth-tab">
-                Registrieren
-            </button>
+<div id="adminDashboard" class="modal hidden">
+  <div class="modal-content admin-content">
+    <button class="close" onclick="adminLogout()">✕</button>
 
-        </div>
+    <h2>⚙ Admin-Dashboard</h2>
 
-        <form id="authForm">
+    <h3>Spiel auswählen</h3>
+    <select id="adminGameSelect"></select>
 
-            <label for="authUsername">Benutzername</label>
-
-            <input
-                id="authUsername"
-                type="text"
-                minlength="3"
-                maxlength="20"
-                autocomplete="username"
-                required
-            >
-
-            <label for="authPassword">Passwort</label>
-
-            <input
-                id="authPassword"
-                type="password"
-                minlength="8"
-                autocomplete="current-password"
-                required
-            >
-
-            <button id="authSubmitButton" class="auth-submit">
-                Einloggen
-            </button>
-
-        </form>
-
-        <p id="authMessage"></p>
-
+    <div class="button-row">
+      <button onclick="generateKey()">Neuen Schlüssel erstellen</button>
+      <button onclick="grantFreeGame()">Spiel kostenlos freischalten</button>
     </div>
 
+    <div id="newKeyArea"></div>
+
+    <hr>
+
+    <h3>Produktschlüssel verwalten</h3>
+    <div id="adminKeyList"></div>
+
+    <hr>
+
+    <h3>Spieleverwaltung</h3>
+    <div id="adminGameList"></div>
+  </div>
 </div>
 
-
-<footer class="footer">
-
-    <h3>DownloadGames</h3>
-
-    <p>Deine Gaming-Welt.</p>
-
-    <p class="footer-note">
-        Lokale Demo-Version – Käufe und Konten sind nicht online verfügbar.
-    </p>
-
+<footer>
+  <p>© 2026 DownloadGames – Testversion</p>
+  <p>Testdaten werden lokal im Browser gespeichert.</p>
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>
