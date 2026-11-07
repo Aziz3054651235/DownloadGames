@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DownloadGames</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="#" class="logo">
+        Download<span>Games</span>
+    </a>
+
+    <div class="header-right">
+
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Spiele suchen..."
+        >
+
+        <div class="points-display">
+            ⭐ <span id="pointsBalance">0</span> Punkte
+        </div>
+
+        <button id="cartButton" class="header-button">
+            🛒 Warenkorb (<span id="cartCount">0</span>)
+        </button>
+
+        <button id="loginOpenButton" class="header-button login-header">
+            Einloggen
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- WARENKORB -->
+
+<section id="cartSection" class="cart-section" hidden>
+
+    <div class="section-heading">
+        <h2>Dein Warenkorb</h2>
+        <button id="closeCartButton" class="small-button">Schließen</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <h3>Gesamt: <span id="cartTotal">0,00 €</span></h3>
+
+</section>
+
+
+<!-- STARTSEITE -->
+
+<main>
+
+    <section class="hero">
+
+        <p class="hero-label">DEINE GAMING-WELT</p>
+
+        <h1>Entdecke deine nächsten Spiele.</h1>
+
+        <p>
+            Finde spannende Spiele, entdecke neue Welten
+            und erweitere deine Sammlung.
+        </p>
+
+    </section>
+
+
+    <section class="games-section">
+
+        <div class="section-heading">
+            <h2>Alle Spiele</h2>
+            <span id="gameCount">0 Spiele</span>
+        </div>
+
+        <div id="gamesContainer" class="games-grid"></div>
+
+        <p id="noResults" hidden>
+            Keine Spiele gefunden.
+        </p>
+
+    </section>
+
+</main>
+
+
+<!-- SPIEDETAILS -->
+
+<div id="gameModal" class="modal" hidden>
+
+    <div class="modal-content">
+
+        <button id="closeGameModal" class="close-button">
+            &times;
+        </button>
+
+        <img id="modalImage" class="modal-image" src="" alt="Spielbild">
+
+        <div class="modal-information">
+
+            <h2 id="modalTitle"></h2>
+
+            <p id="modalDescription"></p>
+
+            <div class="details">
+
+                <p><strong>Genre:</strong> <span id="modalGenre"></span></p>
+                <p><strong>Jahr:</strong> <span id="modalYear"></span></p>
+                <p><strong>Entwickler:</strong> <span id="modalDeveloper"></span></p>
+                <p><strong>Plattform:</strong> <span id="modalPlatform"></span></p>
+                <p><strong>Altersempfehlung:</strong> <span id="modalAge"></span></p>
+
+            </div>
+
+
+            <section class="requirements">
+
+                <h3>Systemanforderungen</h3>
+
+                <p><strong>Betriebssystem:</strong> <span id="modalOS"></span></p>
+                <p><strong>Prozessor:</strong> <span id="modalCPU"></span></p>
+                <p><strong>RAM:</strong> <span id="modalRAM"></span></p>
+                <p><strong>Grafikkarte:</strong> <span id="modalGPU"></span></p>
+                <p><strong>Speicherplatz:</strong> <span id="modalStorage"></span></p>
+                <p><strong>Downloadgröße:</strong> <span id="modalSize"></span></p>
+
+            </section>
+
+
+            <div class="purchase-area">
+
+                <h3 id="modalPrice"></h3>
+
+                <button id="buyButton" class="buy-button">
+                    Mit Punkten kaufen
+                </button>
+
+                <button id="downloadButton" class="download-button" hidden>
+                    ⬇ Spiel herunterladen
+                </button>
+
+                <button id="addCartButton" class="cart-add-button">
+                    In den Warenkorb
+                </button>
+
+                <p id="buyMessage"></p>
+
+            </div>
+
+
+            <!-- KOMMENTARE -->
+
+            <section class="comments-section">
+
+                <h3>Spieler-Kommentare</h3>
+
+                <div id="commentsList"></div>
+
+                <div id="commentForm" hidden>
+
+                    <textarea
+                        id="commentInput"
+                        placeholder="Schreibe einen Kommentar..."
+                        maxlength="500"
+                    ></textarea>
+
+                    <button id="commentButton">
+                        Kommentar hinzufügen
+                    </button>
+
+                </div>
+
+                <p id="commentLoginMessage">
+                    Melde dich an, um Kommentare zu schreiben.
+                </p>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- LOGIN UND REGISTRIERUNG -->
+
+<div id="authModal" class="modal auth-modal" hidden>
+
+    <div class="auth-content">
+
+        <button id="closeAuthModal" class="close-button">
+            &times;
+        </button>
+
+        <h2 id="authTitle">Willkommen bei DownloadGames</h2>
+
+        <p class="auth-description">
+            Melde dich an oder erstelle ein neues Konto.
+        </p>
+
+        <div class="auth-tabs">
+
+            <button id="showLoginButton" class="auth-tab active">
+                Einloggen
+            </button>
+
+            <button id="showRegisterButton" class="auth-tab">
+                Registrieren
+            </button>
+
+        </div>
+
+        <form id="authForm">
+
+            <label for="authUsername">Benutzername</label>
+
+            <input
+                id="authUsername"
+                type="text"
+                minlength="3"
+                maxlength="20"
+                autocomplete="username"
+                required
+            >
+
+            <label for="authPassword">Passwort</label>
+
+            <input
+                id="authPassword"
+                type="password"
+                minlength="8"
+                autocomplete="current-password"
+                required
+            >
+
+            <button id="authSubmitButton" class="auth-submit">
+                Einloggen
+            </button>
+
+        </form>
+
+        <p id="authMessage"></p>
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    <h3>DownloadGames</h3>
+
+    <p>Deine Gaming-Welt.</p>
+
+    <p class="footer-note">
+        Lokale Demo-Version – Käufe und Konten sind nicht online verfügbar.
+    </p>
+
+</footer>
+
+</body>
+</html>
