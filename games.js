@@ -12,9 +12,25 @@ const games = [
         developer: "SadSquare Studio",
        description: "An ordinary suburban home becomes a suffocating labyrinth where every hallway, family photograph, and locked door hints at a history of murder, suicide, and breakdown. Visage is a first-person psychological horror experience built around dread rather than action, using long silences and domestic familiarity to make even a light switch feel threatening. Its house shifts subtly around the player, turning bedrooms, bathrooms, and basements into places that feel both recognisable and deeply wrong. The mood is relentlessly grim, with supernatural horrors arriving as unsettling intrusions instead of predictable jump-scare attractions.\n\nPlayers search the sprawling house for keys, documents, fuses, videotapes, and strange objects that unlock the stories of its former residents. Several major chapters follow different tragic families, each bringing its own visual identity, hauntings, puzzle logic, and terrifying pursuer; one may focus on warped dolls and mirrors, while another turns sound and darkness into weapons. There is no combat system to fall back on, so survival depends on observation, hiding when necessary, conserving light sources, and managing the protagonist’s sanity as darkness and paranormal events take their toll. Progress can be deliberately slow, and some puzzles demand close attention to item descriptions, environmental clues, and the house’s changing layout.\n\nWhat separates Visage from many modern horror games is its willingness to leave players uncomfortable, uncertain, and occasionally lost. The detailed home feels less like a level and more like an antagonistic presence, with oppressive sound design, realistic interiors, and disturbing imagery doing as much work as its ghosts. It shares the intimate, first-person unease of P.T. and Layers of Fear, but it is more demanding, more puzzle-heavy, and far less interested in guiding players from scare to scare. Horror veterans who enjoy patient exploration and oppressive atmosphere find a standout nightmare here, while newcomers should expect a difficult, deliberately disorienting experience rather than an accessible haunted-house ride.",
         icon: "👻",
-        downloadUrl: "https://alpha.staysharpliftsheavydaily.xyz/MTc5NDA4MTkxODpBbkd0RGJvTW5icTBmNXJ1SFZ2RUlnOjY4MDUvYWxwaGExL2ExMTU0YTUwOWJhODcyZTIxZjk1L1Zpc2FnZS1TdGVhbVJJUC5jb20ucmFy"
+        downloadUrl: "https://alpha.staysharpliftsheavydaily.xyz/MTc5NDA4MTkxODpBbkd0RGJvTW5icTBmNXJ1SFZ2RUlnOjY4MDUvYWxwaGExL2ExMTU0YTUwOWJhODcyZTIxZjk1L1Zpc2FnZS1TdGVhbVJJUC5jb20ucmFy",
+        requirements: {
+    minimum: {
+        os: "Windows 10 64-bit",
+        cpu: "Intel Core i5",
+        ram: "8 GB",
+        gpu: "NVIDIA GTX 960",
+        storage: "20 GB"
     },
-    {
+    recommended: {
+        os: "Windows 10/11 64-bit",
+        cpu: "Intel Core i7",
+        ram: "16 GB",
+        gpu: "NVIDIA GTX 1060",
+        storage: "20 GB"
+    }
+},
+    },
+    {///works
         id: "Hariti",
         name: "Hariti",
         price: 9.99,

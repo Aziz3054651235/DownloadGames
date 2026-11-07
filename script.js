@@ -131,10 +131,10 @@ function updatePoints() {
 // DEMO: 500 Punkte pro Sekunde
 // Für eine echte Website muss das serverseitig laufen.
 setInterval(() => {
-    points += 500;
+    points += 1;
     updatePoints();
     saveAll();
-}, 1000);
+}, 2000);
 
 /* =====================================
    SPIELE ANZEIGEN
