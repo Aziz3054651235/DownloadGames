@@ -1,0 +1,233 @@
+
+/* DOWNLOADGAMES AI CHAT */
+
+#dg-chat-widget {
+    position: fixed !important;
+    right: 25px !important;
+    bottom: 25px !important;
+    z-index: 2147483647 !important;
+    font-family: Arial, sans-serif;
+}
+
+/* Öffnen-Button */
+
+#dg-chat-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 23px;
+    border: 1px solid #a855f7;
+    border-radius: 35px;
+    background: linear-gradient(135deg, #9333ea, #6d28d9);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 25px #0009;
+    transition: 0.2s;
+}
+
+#dg-chat-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px #9333ea66;
+}
+
+/* Chatfenster */
+
+#dg-chat-window {
+    width: 350px;
+    height: 490px;
+    max-height: calc(100vh - 100px);
+    margin-bottom: 13px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #171321;
+    color: #ffffff;
+    border: 1px solid #7042a5;
+    border-radius: 17px;
+    box-shadow: 0 10px 40px #000b;
+}
+
+#dg-chat-window.dg-chat-hidden {
+    display: none !important;
+}
+
+/* Kopfzeile */
+
+.dg-chat-header {
+    min-height: 65px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #392052, #241633);
+    border-bottom: 1px solid #51316f;
+}
+
+.dg-chat-title {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.dg-chat-title strong {
+    display: block;
+    font-size: 15px;
+}
+
+.dg-chat-title small {
+    display: block;
+    color: #c5a9e4;
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.dg-chat-avatar {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #7440a8;
+    border-radius: 50%;
+    font-size: 21px;
+}
+
+#dg-chat-close {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+/* Nachrichten */
+
+#dg-chat-messages {
+    flex: 1;
+    min-height: 0;
+    padding: 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.dg-chat-bot,
+.dg-chat-user {
+    max-width: 85%;
+    padding: 11px 13px;
+    border-radius: 13px;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dg-chat-bot {
+    align-self: flex-start;
+    background: #302441;
+    color: #f3eaff;
+    border-bottom-left-radius: 4px;
+}
+
+.dg-chat-user {
+    align-self: flex-end;
+    background: #7939c5;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Fragen */
+
+.dg-chat-question-title {
+    padding: 9px 13px 5px;
+    color: #c7a8e9;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#dg-chat-questions {
+    max-height: 125px;
+    padding: 5px 12px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    overflow-y: auto;
+}
+
+.dg-chat-question {
+    background: #282036;
+    border: 1px solid #7042a5;
+    border-radius: 20px;
+    padding: 7px 10px;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dg-chat-question:hover {
+    background: #7040a5;
+    border-color: #b77aff;
+}
+
+/* Eingabe */
+
+#dg-chat-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #392b4b;
+}
+
+#dg-chat-input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px;
+    border-radius: 9px;
+    border: 1px solid #55416e;
+    background: #251d31;
+    color: white;
+    font-size: 13px;
+    outline: none;
+}
+
+#dg-chat-input:focus {
+    border-color: #a855f7;
+}
+
+#dg-chat-form button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 9px;
+    background: #873cdb;
+    color: white;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.dg-chat-footer {
+    padding: 7px;
+    text-align: center;
+    color: #9d8bad;
+    font-size: 10px;
+    background: #211a2b;
+}
+
+/* Smartphone */
+
+@media (max-width: 480px) {
+    #dg-chat-widget {
+        right: 12px !important;
+        bottom: 12px !important;
+    }
+
+    #dg-chat-window {
+        width: calc(100vw - 24px);
+        height: min(490px, 75vh);
+    }
+}
