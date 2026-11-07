@@ -757,7 +757,11 @@
             return { e, score: 0.65 * d + 0.35 * kwPart * (d > 0 ? 1 : 0.6) };
         }).sort((a, b) => b.score - a.score);
 
-        if (t.length && ranked[0].score >= 0.5)
+        if (
+    t.length &&
+    ranked[0].score >= 0.68 &&
+    ranked[0].score - (ranked[1]?.score || 0) >= 0.12
+)
             return { text: fillTemplate(ranked[0].e.a), score: ranked[0].score, suggestions: [] };
 
         if (state.lastGame && t.length === 1 && matchedIntents(t).length)
@@ -766,7 +770,12 @@
         const nb = classify(ws);
         const M = MODEL;
 
-        if (nb && nb.p >= 0.6 && (nb.unknown === 0 || nb.p >= 0.9) && !(nb.words > 14 && nb.p < 0.95)) {
+        if (
+    nb &&
+    nb.p >= 0.82 &&
+    (nb.unknown === 0 || nb.p >= 0.95) &&
+    !(nb.words > 14 && nb.p < 0.95)
+) {
             const c = M.classes[nb.top[0].ci];
 
             if (c.faq) return { text: fillTemplate(c.faq.a), score: nb.p, suggestions: [] };
