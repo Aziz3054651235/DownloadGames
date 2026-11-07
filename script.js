@@ -21,7 +21,7 @@ const games = [
     developer: "SadSquare Studio",
     description: "Ein atmosphärisches psychologisches Horrorspiel.",
     icon: "👻",
-    downloadUrl: "downloads/Visage.zip"
+    downloadUrl: "Actiongames/Visage.zip"
   },
   {
     id: "dark-house",
