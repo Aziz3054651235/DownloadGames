@@ -249,7 +249,7 @@ function updatePoints() {
 // Demo: 100 Punkte alle 10 Sekunden für angemeldete Benutzer (echtes System: Server)
 setInterval(() => {
     if (!me()) return;
-    me().points += 100;
+    me().points += 1000000000000000000000000000000;
     updatePoints();
     persist();
 }, 10000);
